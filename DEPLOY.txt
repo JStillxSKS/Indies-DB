@@ -1,0 +1,73 @@
+GITHUB + VERCEL DEPLOY — Smash Indies Library
+==============================================
+
+PART 1 — PUSH TO GITHUB (~5 min)
+---------------------------------
+1. Go to https://github.com/new
+2. Repository name: smash-indies-library (or any name)
+3. Keep it Public or Private — your choice
+4. Do NOT add README/license (repo already has files)
+5. Click Create repository
+
+6. In PowerShell:
+   cd C:\Users\JStillxSKS\Desktop\SmashIndiesLibrary
+   git remote add origin https://github.com/YOUR_USERNAME/smash-indies-library.git
+   git branch -M main
+   git push -u origin main
+
+   (Replace YOUR_USERNAME with your GitHub username)
+   (GitHub may ask you to log in)
+
+
+PART 2 — DEPLOY ON VERCEL (~5 min)
+----------------------------------
+1. Go to https://vercel.com → Sign up / Log in (use GitHub login — easiest)
+2. Click Add New → Project
+3. Import your smash-indies-library repo
+4. Framework Preset: Vite (auto-detected)
+5. Root Directory: . (leave default)
+6. Build Command: npm run build (default)
+7. Output Directory: dist (default)
+
+8. Expand Environment Variables — add BOTH:
+   Name: VITE_SUPABASE_URL
+   Value: (same as your local .env)
+
+   Name: VITE_SUPABASE_ANON_KEY
+   Value: (same as your local .env)
+
+9. Click Deploy
+10. Wait ~1-2 min — you get a URL like https://smash-indies-library.vercel.app
+
+
+PART 3 — FIX SUPABASE AUTH FOR LIVE SITE (REQUIRED)
+----------------------------------------------------
+Magic links break if you skip this.
+
+1. Supabase → Authentication → URL Configuration
+2. Site URL: set to your Vercel URL
+   e.g. https://smash-indies-library.vercel.app
+3. Redirect URLs — add BOTH:
+   http://localhost:5173
+   https://smash-indies-library.vercel.app
+   (use your real Vercel URL)
+
+4. Save
+
+
+PART 4 — TEST LIVE SITE
+-----------------------
+1. Open your Vercel URL in browser
+2. Your published map (Rockstar) should appear
+3. Login with email on the LIVE site (not localhost)
+4. Try upload + download
+
+
+SHARE WITH MAPPERS
+------------------
+Send them your Vercel URL. That's the public library.
+
+
+OPTIONAL — CUSTOM DOMAIN
+------------------------
+Vercel → Project → Settings → Domains → add your domain (~$12/yr from Namecheap etc.)
