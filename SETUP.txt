@@ -1,0 +1,71 @@
+SMASH INDIES LIBRARY — YOUR SETUP CHECKLIST
+===========================================
+
+Already done for you:
+  - Full React app built (browse, upload, download, install guide)
+  - Demo mode with placeholder maps (works without Supabase)
+  - Supabase SQL files in supabase/
+  - Vercel deploy config (vercel.json)
+  - Synthetic test fixture (not your personal maps)
+
+PREVIEW NOW (no accounts needed):
+  1. Open terminal in SmashIndiesLibrary
+  2. npm run dev
+  3. Open http://localhost:5173
+  4. Browse demo maps — upload disabled until Supabase is configured
+
+-------------------------------------------
+STEP 1 — SUPABASE (one time, ~10 min)
+-------------------------------------------
+  1. Go to https://supabase.com → New project (free tier)
+  2. SQL Editor → paste and run: supabase/schema.sql
+  3. Storage → New bucket → name: indies → Public bucket: ON
+  4. SQL Editor → paste and run: supabase/storage-policies.sql
+  5. Project Settings → API → copy:
+       - Project URL
+       - anon public key
+
+-------------------------------------------
+STEP 2 — LOCAL .env
+-------------------------------------------
+  1. copy .env.example .env
+  2. Paste your URL and anon key into .env
+
+-------------------------------------------
+STEP 3 — TEST LOCALLY
+-------------------------------------------
+  npm run dev
+
+  - Login page → enter email → click magic link in inbox
+  - Upload → drop a finished .indies file
+  - Browse → your map appears
+  - Download → works
+
+-------------------------------------------
+STEP 4 — DEPLOY TO VERCEL (one time)
+-------------------------------------------
+  1. Push SmashIndiesLibrary to a GitHub repo
+  2. https://vercel.com → Import project → select repo
+  3. Framework: Vite (auto-detected)
+  4. Environment variables (same as .env):
+       VITE_SUPABASE_URL
+       VITE_SUPABASE_ANON_KEY
+  5. Deploy
+
+  Optional: add custom domain in Vercel settings
+
+-------------------------------------------
+USEFUL COMMANDS
+-------------------------------------------
+  npm run dev          — local preview
+  npm run build        — production build
+  npm run preview      — preview production build
+  npm run fixture      — create synthetic test .indies
+  npm run test:parser  — verify parser on synthetic fixture
+
+-------------------------------------------
+NOTES
+-------------------------------------------
+  - Your Desktop maps (UNDEAD, Rockstar, etc.) were NOT uploaded
+  - Demo maps are fake placeholders only
+  - Voting is not in v1 (downloads + newest sort only)
