@@ -8,15 +8,21 @@ import {
 import type { Session, User } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase'
 
+type AuthResult = { error: string | null }
+
 type AuthContextValue = {
   session: Session | null
   user: User | null
   loading: boolean
-  signIn: (email: string) => Promise<{ error: string | null }>
+  signInWithPassword: (email: string, password: string) => Promise<AuthResult>
+  signUpWithPassword: (email: string, password: string) => Promise<AuthResult>
+  signInWithGoogle: () => Promise<AuthResult>
   signOut: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null)
+
+const redirectTo = () => `${window.location.origin}/`
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null)
@@ -50,11 +56,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => sub.subscription.unsubscribe()
   }, [])
 
-  async function signIn(email: string) {
+  async function signInWithPassword(email: string, password: string): Promise<AuthResult> {
     if (!supabase) return { error: 'Supabase is not configured' }
-    const { error } = await supabase.auth.signInWithOtp({
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    return { error: error?.message ?? null }
+  }
+
+  async function signUpWithPassword(email: string, password: string): Promise<AuthResult> {
+    if (!supabase) return { error: 'Supabase is not configured' }
+    const { error } = await supabase.auth.signUp({
       email,
-      options: { emailRedirectTo: `${window.location.origin}/` },
+      password,
+      options: { emailRedirectTo: redirectTo() },
+    })
+    return { error: error?.message ?? null }
+  }
+
+  async function signInWithGoogle(): Promise<AuthResult> {
+    if (!supabase) return { error: 'Supabase is not configured' }
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: redirectTo() },
     })
     return { error: error?.message ?? null }
   }
@@ -69,7 +91,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         session,
         user: session?.user ?? null,
         loading,
-        signIn,
+        signInWithPassword,
+        signUpWithPassword,
+        signInWithGoogle,
         signOut,
       }}
     >

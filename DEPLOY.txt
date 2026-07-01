@@ -63,6 +63,21 @@ PART 4 — TEST LIVE SITE
 4. Try upload + download
 
 
+LOGIN OPTIONS (recommended over magic links)
+--------------------------------------------
+Email + password: works out of the box — Sign Up on /login
+
+Optional — disable email confirmation for easier signups:
+  Supabase → Authentication → Providers → Email → turn OFF "Confirm email"
+
+Optional — Google login (one-click, no email limits):
+  1. Supabase → Authentication → Providers → Google → Enable
+  2. Create OAuth client at https://console.cloud.google.com
+  3. Authorized redirect URI:
+     https://hitztaczxvpgdvseudjy.supabase.co/auth/v1/callback
+  4. Paste Client ID + Secret into Supabase Google provider
+
+
 SHARE WITH MAPPERS
 ------------------
 Send them your Vercel URL. That's the public library.
