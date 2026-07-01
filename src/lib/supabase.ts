@@ -62,3 +62,45 @@ export async function incrementDownload(mapId: string): Promise<void> {
   if (!supabase) return
   await supabase.rpc('increment_download', { map_id: mapId })
 }
+
+export type MapFilter = 'all' | 'has_extreme'
+
+export async function fetchMapsFiltered(
+  sort: 'newest' | 'downloads',
+  filter: MapFilter = 'all',
+  limit = 50,
+): Promise<MapRecord[]> {
+  let maps = await fetchMaps(sort, limit)
+  if (filter === 'has_extreme') {
+    maps = maps.filter((m) => m.difficulties.extreme > 0)
+  }
+  return maps
+}
+
+export async function fetchUserMaps(userId: string): Promise<MapRecord[]> {
+  if (!supabase) return []
+  const { data, error } = await supabase
+    .from('maps')
+    .select('*')
+    .eq('mapper_id', userId)
+    .order('created_at', { ascending: false })
+
+  if (error) throw error
+  return (data ?? []) as MapRecord[]
+}
+
+export async function deleteMap(map: MapRecord): Promise<void> {
+  if (!supabase) throw new Error('Supabase not configured')
+
+  const paths = [map.file_path, map.cover_path].filter(Boolean) as string[]
+  if (paths.length) {
+    await supabase.storage.from('indies').remove(paths)
+  }
+
+  const { error } = await supabase.from('maps').delete().eq('id', map.id)
+  if (error) throw error
+}
+
+export async function fetchAllMapsForStats(): Promise<MapRecord[]> {
+  return fetchMaps('newest', 200)
+}

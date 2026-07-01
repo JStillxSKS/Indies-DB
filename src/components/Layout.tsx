@@ -1,6 +1,7 @@
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { supabaseConfigured } from '../lib/supabase'
+import { DemoBanner } from './DemoBanner'
 
 export function Layout() {
   const { user, signOut } = useAuth()
@@ -20,6 +21,9 @@ export function Layout() {
 
           <nav className="flex items-center gap-1">
             <NavLink to="/maps" className={navClass}>Maps</NavLink>
+            {user && supabaseConfigured && (
+              <NavLink to="/my-maps" className={navClass}>My Maps</NavLink>
+            )}
             <NavLink to="/install" className={navClass}>Install</NavLink>
           </nav>
 
@@ -60,6 +64,8 @@ export function Layout() {
           </div>
         </div>
       </header>
+
+      <DemoBanner />
 
       <main className="flex-1">
         <Outlet />

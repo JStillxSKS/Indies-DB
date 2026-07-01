@@ -1,14 +1,28 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import type { MapRecord } from '../types/map'
-import { coverPublicUrl, fetchMap, filePublicUrl, incrementDownload } from '../lib/supabase'
+import {
+  coverPublicUrl,
+  deleteMap,
+  fetchMap,
+  filePublicUrl,
+  incrementDownload,
+  supabaseConfigured,
+} from '../lib/supabase'
 import { DifficultyBar } from '../components/DifficultyBar'
 
 export function MapDetail() {
   const { id } = useParams<{ id: string }>()
+  const { user } = useAuth()
+  const navigate = useNavigate()
   const [map, setMap] = useState<MapRecord | null>(null)
   const [loading, setLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
+  const [copied, setCopied] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+
+  const isOwner = user && map && user.id === map.mapper_id
 
   useEffect(() => {
     if (!id) return
@@ -36,6 +50,24 @@ export function MapDetail() {
     a.click()
   }
 
+  function handleShare() {
+    navigator.clipboard.writeText(window.location.href)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  async function handleDelete() {
+    if (!map || !confirm(`Delete "${map.title}"? This cannot be undone.`)) return
+    setDeleting(true)
+    try {
+      await deleteMap(map)
+      navigate('/my-maps')
+    } catch (e) {
+      alert(e instanceof Error ? e.message : 'Delete failed')
+      setDeleting(false)
+    }
+  }
+
   if (loading) return <p className="text-muted text-center py-20">Loading…</p>
   if (notFound || !map) {
     return (
@@ -56,7 +88,7 @@ export function MapDetail() {
       </Link>
 
       <div className="flex flex-col sm:flex-row gap-8">
-        <div className="w-48 h-48 sm:w-52 sm:h-52 rounded-xl bg-surface2 border border-border overflow-hidden shrink-0 mx-auto sm:mx-0">
+        <div className="w-48 h-48 sm:w-52 sm:h-52 rounded-xl bg-surface2 border border-border overflow-hidden shrink-0 mx-auto sm:mx-0 shadow-lg shadow-black/20">
           {cover ? (
             <img src={cover} alt="" className="w-full h-full object-cover" />
           ) : (
@@ -75,13 +107,32 @@ export function MapDetail() {
             Uploaded {date} · {map.downloads} downloads
           </p>
 
-          <button
-            type="button"
-            onClick={handleDownload}
-            className="px-6 py-3 rounded-lg bg-accent hover:bg-accent-hover text-white font-semibold mb-8"
-          >
-            Download .indies
-          </button>
+          <div className="flex flex-wrap gap-2 mb-8">
+            <button
+              type="button"
+              onClick={handleDownload}
+              className="px-6 py-3 rounded-lg bg-accent hover:bg-accent-hover text-white font-semibold"
+            >
+              Download .indies
+            </button>
+            <button
+              type="button"
+              onClick={handleShare}
+              className="px-4 py-3 rounded-lg border border-border bg-surface hover:border-accent/40 text-sm"
+            >
+              {copied ? 'Link copied!' : 'Share link'}
+            </button>
+            {isOwner && supabaseConfigured && (
+              <button
+                type="button"
+                onClick={handleDelete}
+                disabled={deleting}
+                className="px-4 py-3 rounded-lg border border-red-500/30 text-red-300 hover:bg-red-500/10 text-sm disabled:opacity-50"
+              >
+                {deleting ? 'Deleting…' : 'Delete'}
+              </button>
+            )}
+          </div>
 
           <h2 className="text-sm font-semibold text-muted uppercase tracking-wide mb-4">
             Difficulties

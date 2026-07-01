@@ -41,6 +41,32 @@ export const DEMO_MAPS: MapRecord[] = [
     downloads: 127,
     created_at: new Date(Date.now() - 1 * 86400000).toISOString(),
   },
+  {
+    id: 'demo-4',
+    title: 'Demo Track Four',
+    artist: 'Placeholder Act',
+    charter: 'BeatForge',
+    mapper_id: '00000000-0000-0000-0000-000000000004',
+    file_path: 'maps/demo/demo-4.indies',
+    cover_path: null,
+    bpm_est: 168,
+    difficulties: { easy: 32, normal: 110, hard: 245, extreme: 520 },
+    downloads: 203,
+    created_at: new Date(Date.now() - 8 * 86400000).toISOString(),
+  },
+  {
+    id: 'demo-5',
+    title: 'Demo Track Five',
+    artist: 'Synth Pack',
+    charter: 'NightChart',
+    mapper_id: '00000000-0000-0000-0000-000000000005',
+    file_path: 'maps/demo/demo-5.indies',
+    cover_path: null,
+    bpm_est: 118,
+    difficulties: { easy: 0, normal: 45, hard: 120, extreme: 278 },
+    downloads: 19,
+    created_at: new Date(Date.now() - 3 * 86400000).toISOString(),
+  },
 ]
 
 export function demoMapsSorted(sort: 'newest' | 'downloads'): MapRecord[] {

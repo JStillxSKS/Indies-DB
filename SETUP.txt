@@ -62,6 +62,15 @@ USEFUL COMMANDS
   npm run preview      — preview production build
   npm run fixture      — create synthetic test .indies
   npm run test:parser  — verify parser on synthetic fixture
+  npm run check-env    — check if .env is configured
+
+NEW IN THIS BUILD:
+  - Hero home page with stats bar
+  - "Has Extreme" filter on Maps page
+  - My Maps page (view + delete your uploads)
+  - Share link on map detail page
+  - Demo banner when Supabase not connected
+  - GitHub Actions CI (build + parser test)
 
 -------------------------------------------
 NOTES
