@@ -5,33 +5,44 @@ import { supabaseConfigured } from '../lib/supabase'
 
 type Mode = 'signin' | 'signup'
 
+function friendlyError(msg: string): string {
+  if (msg.includes('Invalid login credentials')) {
+    return 'Wrong email or password. Try Sign Up if you never set a password.'
+  }
+  if (msg.includes('User already registered')) {
+    return 'Account exists — use Sign In with your password.'
+  }
+  if (msg.includes('Email not confirmed')) {
+    return 'Confirm your email first, or disable email confirmation in Supabase.'
+  }
+  return msg
+}
+
 export function Login() {
   const { signInWithPassword, signUpWithPassword, signInWithGoogle, user } = useAuth()
   const navigate = useNavigate()
-  const [mode, setMode] = useState<Mode>('signin')
+  const [mode, setMode] = useState<Mode>('signup')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
-  const [message, setMessage] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-
-  if (!supabaseConfigured) {
-    return (
-      <div className="max-w-md mx-auto px-4 py-20 text-center text-muted">
-        Configure Supabase in .env to enable login.
-      </div>
-    )
-  }
 
   useEffect(() => {
     if (user) navigate('/')
   }, [user, navigate])
 
+  if (!supabaseConfigured) {
+    return (
+      <div className="max-w-md mx-auto px-4 py-20 text-center text-muted">
+        Supabase not configured on this deploy. Add env vars in Vercel.
+      </div>
+    )
+  }
+
   async function handlePasswordSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
     setError(null)
-    setMessage(null)
 
     const result =
       mode === 'signin'
@@ -41,17 +52,19 @@ export function Login() {
     setLoading(false)
 
     if (result.error) {
-      setError(result.error)
+      setError(friendlyError(result.error))
+      return
+    }
+
+    if (result.session) {
+      navigate('/')
       return
     }
 
     if (mode === 'signup') {
-      setMessage('Account created. If email confirmation is on, check your inbox — otherwise sign in now.')
+      setError('Account may need email confirmation. Check inbox or disable confirm email in Supabase.')
       setMode('signin')
-      return
     }
-
-    navigate('/')
   }
 
   async function handleGoogle() {
@@ -59,13 +72,13 @@ export function Login() {
     setError(null)
     const { error: err } = await signInWithGoogle()
     setLoading(false)
-    if (err) setError(err)
+    if (err) setError(friendlyError(err))
   }
 
   return (
     <div className="max-w-md mx-auto px-4 py-16">
       <h1 className="text-2xl font-bold mb-2 text-center">Indies-DB</h1>
-      <p className="text-muted text-sm text-center mb-8">Sign in to upload maps</p>
+      <p className="text-muted text-sm text-center mb-8">Email + password — no magic link</p>
 
       <button
         type="button"
@@ -78,16 +91,16 @@ export function Login() {
 
       <div className="flex items-center gap-3 mb-6">
         <div className="flex-1 h-px bg-border" />
-        <span className="text-xs text-muted">or email</span>
+        <span className="text-xs text-muted">or email + password</span>
         <div className="flex-1 h-px bg-border" />
       </div>
 
       <div className="flex gap-2 mb-4">
-        {(['signin', 'signup'] as const).map((m) => (
+        {(['signup', 'signin'] as const).map((m) => (
           <button
             key={m}
             type="button"
-            onClick={() => { setMode(m); setError(null); setMessage(null) }}
+            onClick={() => { setMode(m); setError(null) }}
             className={`flex-1 py-2 rounded-lg text-sm font-medium ${
               mode === m ? 'bg-accent text-white' : 'bg-surface2 text-muted'
             }`}
@@ -117,8 +130,11 @@ export function Login() {
           onChange={(e) => setPassword(e.target.value)}
           className="w-full px-4 py-3 rounded-lg bg-surface border border-border focus:outline-none focus:border-accent"
         />
-        {error && <p className="text-sm text-red-400">{error}</p>}
-        {message && <p className="text-sm text-dl">{message}</p>}
+        {error && (
+          <p className="text-sm text-red-400 bg-red-400/10 border border-red-400/30 rounded-lg px-3 py-2">
+            {error}
+          </p>
+        )}
         <button
           type="submit"
           disabled={loading}

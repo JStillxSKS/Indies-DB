@@ -8,7 +8,7 @@ import {
 import type { Session, User } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase'
 
-type AuthResult = { error: string | null }
+type AuthResult = { error: string | null; session: Session | null }
 
 type AuthContextValue = {
   session: Session | null
@@ -38,7 +38,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const params = new URLSearchParams(window.location.search)
       const code = params.get('code')
       if (code) {
-        await supabase!.auth.exchangeCodeForSession(code)
+        const { error } = await supabase!.auth.exchangeCodeForSession(code)
+        if (error) console.error('Auth callback error:', error.message)
         window.history.replaceState({}, '', window.location.pathname)
       }
 
@@ -57,28 +58,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   async function signInWithPassword(email: string, password: string): Promise<AuthResult> {
-    if (!supabase) return { error: 'Supabase is not configured' }
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    return { error: error?.message ?? null }
+    if (!supabase) return { error: 'Supabase is not configured', session: null }
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+    if (data.session) setSession(data.session)
+    return { error: error?.message ?? null, session: data.session }
   }
 
   async function signUpWithPassword(email: string, password: string): Promise<AuthResult> {
-    if (!supabase) return { error: 'Supabase is not configured' }
-    const { error } = await supabase.auth.signUp({
+    if (!supabase) return { error: 'Supabase is not configured', session: null }
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: { emailRedirectTo: redirectTo() },
     })
-    return { error: error?.message ?? null }
+    if (data.session) setSession(data.session)
+    return { error: error?.message ?? null, session: data.session }
   }
 
   async function signInWithGoogle(): Promise<AuthResult> {
-    if (!supabase) return { error: 'Supabase is not configured' }
+    if (!supabase) return { error: 'Supabase is not configured', session: null }
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: { redirectTo: redirectTo() },
     })
-    return { error: error?.message ?? null }
+    return { error: error?.message ?? null, session: null }
   }
 
   async function signOut() {
