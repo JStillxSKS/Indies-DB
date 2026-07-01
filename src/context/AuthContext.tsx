@@ -28,10 +28,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return
     }
 
-    supabase.auth.getSession().then(({ data }) => {
+    async function initAuth() {
+      const params = new URLSearchParams(window.location.search)
+      const code = params.get('code')
+      if (code) {
+        await supabase!.auth.exchangeCodeForSession(code)
+        window.history.replaceState({}, '', window.location.pathname)
+      }
+
+      const { data } = await supabase!.auth.getSession()
       setSession(data.session)
       setLoading(false)
-    })
+    }
+
+    initAuth()
 
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
       setSession(s)
@@ -44,7 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!supabase) return { error: 'Supabase is not configured' }
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: window.location.origin },
+      options: { emailRedirectTo: `${window.location.origin}/` },
     })
     return { error: error?.message ?? null }
   }

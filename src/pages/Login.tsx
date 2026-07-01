@@ -31,7 +31,13 @@ export function Login() {
     return (
       <div className="max-w-md mx-auto px-4 py-20 text-center">
         <h1 className="text-xl font-bold mb-4">Check your email</h1>
-        <p className="text-muted">We sent a magic link to <strong className="text-text">{email}</strong></p>
+        <p className="text-muted mb-4">
+          We sent a magic link to <strong className="text-text">{email}</strong>
+        </p>
+        <p className="text-sm text-muted">
+          Click the link in the email — you should return here logged in.
+          Check spam if it doesn&apos;t arrive in a minute.
+        </p>
       </div>
     )
   }
