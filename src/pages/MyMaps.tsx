@@ -57,7 +57,7 @@ export function MyMaps() {
         <h1 className="text-2xl font-bold">My Maps</h1>
         <Link
           to="/upload"
-          className="px-4 py-2 rounded-lg bg-accent hover:bg-accent-hover text-white text-sm font-medium"
+          className="px-4 py-2 rounded-lg btn-primary text-sm"
         >
           Upload new
         </Link>

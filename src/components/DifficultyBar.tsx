@@ -20,8 +20,12 @@ export function DifficultyBar({ counts }: { counts: DifficultyCounts }) {
             <span className="text-muted">{label}</span>
             <div className="h-2 rounded-full bg-surface2 overflow-hidden">
               <div
-                className="h-full rounded-full bg-accent transition-all"
-                style={{ width: `${pct}%`, opacity: n > 0 ? 1 : 0.2 }}
+                className="h-full rounded-full transition-all"
+                style={{
+                  background: 'linear-gradient(90deg, #e8262a, #ffb800)',
+                  width: `${pct}%`,
+                  opacity: n > 0 ? 1 : 0.2,
+                }}
               />
             </div>
             <span className="text-right text-muted font-mono text-xs">{n} notes</span>

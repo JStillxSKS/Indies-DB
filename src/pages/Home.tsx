@@ -29,7 +29,7 @@ export function Home() {
   return (
     <div>
       <section className="relative overflow-hidden border-b border-border">
-        <div className="absolute inset-0 bg-gradient-to-br from-accent/20 via-transparent to-transparent pointer-events-none" />
+        <div className="absolute inset-0 hero-glow pointer-events-none" />
         <div className="max-w-6xl mx-auto px-4 py-14 sm:py-20 relative">
           <p className="text-accent text-sm font-semibold uppercase tracking-widest mb-3">
             Smash Drums
@@ -46,7 +46,7 @@ export function Home() {
           <div className="flex flex-wrap gap-3">
             <Link
               to="/maps"
-              className="px-5 py-2.5 rounded-lg bg-accent hover:bg-accent-hover text-white font-medium text-sm"
+              className="px-5 py-2.5 rounded-lg btn-primary text-sm"
             >
               Browse maps
             </Link>

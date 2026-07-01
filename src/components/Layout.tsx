@@ -13,10 +13,13 @@ export function Layout() {
 
   return (
     <div className="min-h-svh flex flex-col bg-bg text-text">
-      <header className="border-b border-border bg-surface/80 backdrop-blur sticky top-0 z-50">
+      <header className="border-b border-border bg-black/95 backdrop-blur sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
-          <Link to="/" className="font-bold text-lg tracking-tight shrink-0">
-            <span className="text-accent">Indies</span>-DB
+          <Link to="/" className="font-bold text-lg tracking-tight shrink-0 flex items-center gap-2">
+            <span className="w-8 h-8 rounded-lg btn-primary flex items-center justify-center text-sm shadow-none">
+              ♪
+            </span>
+            <span className="text-gradient-smash">Indies-DB</span>
           </Link>
 
           <nav className="flex items-center gap-1">
@@ -29,14 +32,14 @@ export function Layout() {
 
           <div className="flex items-center gap-2 shrink-0">
             {!supabaseConfigured ? (
-              <span className="text-xs text-amber-400/90 hidden sm:inline border border-amber-400/30 rounded px-2 py-0.5">
+              <span className="text-xs text-accent hidden sm:inline border border-accent/30 rounded px-2 py-0.5">
                 Demo mode — add .env to go live
               </span>
             ) : user ? (
               <>
                 <NavLink
                   to="/upload"
-                  className="px-3 py-1.5 rounded-lg bg-accent hover:bg-accent-hover text-white text-sm font-medium"
+                  className="px-3 py-1.5 rounded-lg btn-primary text-sm"
                 >
                   Upload
                 </NavLink>
@@ -52,7 +55,7 @@ export function Layout() {
               <>
                 <NavLink
                   to="/upload"
-                  className="px-3 py-1.5 rounded-lg bg-accent hover:bg-accent-hover text-white text-sm font-medium"
+                  className="px-3 py-1.5 rounded-lg btn-primary text-sm"
                 >
                   Upload
                 </NavLink>

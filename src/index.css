@@ -1,15 +1,18 @@
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 @theme {
-  --color-bg: #0d0f14;
-  --color-surface: #151820;
-  --color-surface2: #1c2030;
-  --color-border: #2a3045;
-  --color-text: #e8eaef;
-  --color-muted: #8b93a8;
-  --color-accent: #7c5cff;
-  --color-accent-hover: #9b7fff;
-  --color-dl: #3dd68c;
+  --color-bg: #000000;
+  --color-surface: #0a0a0a;
+  --color-surface2: #141414;
+  --color-border: #1f1f1f;
+  --color-text: #f0f0f5;
+  --color-muted: #8888a0;
+  --color-accent: #ffb800;
+  --color-accent-hover: #ffc933;
+  --color-accent-2: #e8262a;
+  --color-dl: #ffb800;
+  --font-sans: "Inter", system-ui, sans-serif;
 }
 
 * {
@@ -21,10 +24,38 @@ body {
   min-height: 100svh;
   background: var(--color-bg);
   color: var(--color-text);
-  font-family: "Segoe UI", system-ui, sans-serif;
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
 }
 
 #root {
   min-height: 100svh;
+}
+
+/* Smash Drums Editor — primary button gradient */
+.btn-primary {
+  background: linear-gradient(135deg, #e8262a, #ffb800);
+  color: #000;
+  font-weight: 600;
+  box-shadow: 0 0 20px rgba(255, 184, 0, 0.28);
+  transition: box-shadow 0.2s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+  box-shadow: 0 0 28px rgba(255, 184, 0, 0.38);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+}
+
+.text-gradient-smash {
+  background: linear-gradient(135deg, #e8262a, #ffb800);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero-glow {
+  background: linear-gradient(135deg, rgba(232, 38, 42, 0.15), rgba(255, 184, 0, 0.12));
 }

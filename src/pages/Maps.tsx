@@ -51,7 +51,7 @@ export function Maps() {
               onClick={() => setSort(t.id)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 sort === t.id
-                  ? 'bg-accent text-white'
+                  ? 'btn-primary shadow-none'
                   : 'bg-surface2 text-muted hover:text-text'
               }`}
             >

@@ -57,7 +57,7 @@ export function MapRow({ map }: { map: MapRecord }) {
         <button
           type="button"
           onClick={handleDownload}
-          className="px-3 py-1 rounded-lg bg-accent hover:bg-accent-hover text-white text-xs font-medium"
+          className="px-3 py-1 rounded-lg btn-primary text-xs"
         >
           Download
         </button>

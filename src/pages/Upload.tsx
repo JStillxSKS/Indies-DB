@@ -32,7 +32,7 @@ export function Upload() {
       <div className="max-w-lg mx-auto px-4 py-20 text-center">
         <h1 className="text-xl font-bold mb-4">Sign in to upload</h1>
         <p className="text-muted mb-6">You need an account to publish maps.</p>
-        <Link to="/login" className="px-5 py-2.5 rounded-lg bg-accent text-white font-medium">
+        <Link to="/login" className="px-5 py-2.5 rounded-lg btn-primary font-medium inline-block">
           Login
         </Link>
       </div>
@@ -175,7 +175,7 @@ export function Upload() {
             type="button"
             onClick={handlePublish}
             disabled={publishing}
-            className="mt-6 w-full py-3 rounded-lg bg-accent hover:bg-accent-hover disabled:opacity-50 text-white font-semibold"
+            className="mt-6 w-full py-3 rounded-lg btn-primary disabled:opacity-50"
           >
             {publishing ? 'Publishing…' : 'Publish'}
           </button>

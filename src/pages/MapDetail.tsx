@@ -111,7 +111,7 @@ export function MapDetail() {
             <button
               type="button"
               onClick={handleDownload}
-              className="px-6 py-3 rounded-lg bg-accent hover:bg-accent-hover text-white font-semibold"
+              className="px-6 py-3 rounded-lg btn-primary"
             >
               Download .indies
             </button>

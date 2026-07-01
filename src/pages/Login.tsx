@@ -102,7 +102,7 @@ export function Login() {
             type="button"
             onClick={() => { setMode(m); setError(null) }}
             className={`flex-1 py-2 rounded-lg text-sm font-medium ${
-              mode === m ? 'bg-accent text-white' : 'bg-surface2 text-muted'
+              mode === m ? 'btn-primary shadow-none' : 'bg-surface2 text-muted'
             }`}
           >
             {m === 'signin' ? 'Sign In' : 'Sign Up'}
@@ -138,7 +138,7 @@ export function Login() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3 rounded-lg bg-accent hover:bg-accent-hover disabled:opacity-50 text-white font-semibold"
+          className="w-full py-3 rounded-lg btn-primary disabled:opacity-50"
         >
           {loading ? 'Please wait…' : mode === 'signin' ? 'Sign In' : 'Create Account'}
         </button>
