@@ -1,5 +1,9 @@
 -- Run after creating bucket "indies" in Supabase Storage (public bucket)
 
+drop policy if exists "indies_auth_upload" on storage.objects;
+drop policy if exists "indies_public_read" on storage.objects;
+drop policy if exists "indies_auth_delete_own" on storage.objects;
+
 -- Authenticated users can upload to their own folder
 create policy "indies_auth_upload"
 on storage.objects for insert
