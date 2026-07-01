@@ -16,7 +16,7 @@ export function Layout() {
       <header className="border-b border-border bg-surface/80 backdrop-blur sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
           <Link to="/" className="font-bold text-lg tracking-tight shrink-0">
-            <span className="text-accent">Smash</span> Indies
+            <span className="text-accent">Indies</span>-DB
           </Link>
 
           <nav className="flex items-center gap-1">
@@ -72,7 +72,7 @@ export function Layout() {
       </main>
 
       <footer className="border-t border-border py-6 text-center text-sm text-muted">
-        Community maps for Smash Drums Indies
+        Indies-DB — community maps for Smash Drums
       </footer>
     </div>
   )

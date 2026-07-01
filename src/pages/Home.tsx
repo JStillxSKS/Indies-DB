@@ -32,12 +32,15 @@ export function Home() {
         <div className="absolute inset-0 bg-gradient-to-br from-accent/20 via-transparent to-transparent pointer-events-none" />
         <div className="max-w-6xl mx-auto px-4 py-14 sm:py-20 relative">
           <p className="text-accent text-sm font-semibold uppercase tracking-widest mb-3">
-            Smash Drums Indies
+            Smash Drums
           </p>
           <h1 className="text-3xl sm:text-5xl font-bold mb-4 max-w-2xl leading-tight">
-            Community maps for mappers
+            Indies-DB
           </h1>
-          <p className="text-muted max-w-xl text-lg mb-8">
+          <p className="text-muted max-w-xl text-lg mb-2 -mt-2">
+            Community maps for mappers
+          </p>
+          <p className="text-muted max-w-xl mb-8">
             Upload finished .indies packs, browse charts, and download — all difficulties in one file.
           </p>
           <div className="flex flex-wrap gap-3">

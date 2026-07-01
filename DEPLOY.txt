@@ -1,17 +1,17 @@
-GITHUB + VERCEL DEPLOY — Smash Indies Library
-==============================================
+GITHUB + VERCEL DEPLOY — Indies-DB
+===================================
 
 PART 1 — PUSH TO GITHUB (~5 min)
 ---------------------------------
 1. Go to https://github.com/new
-2. Repository name: smash-indies-library (or any name)
+2. Repository name: Indies-DB
 3. Keep it Public or Private — your choice
 4. Do NOT add README/license (repo already has files)
 5. Click Create repository
 
 6. In PowerShell:
    cd C:\Users\JStillxSKS\Desktop\SmashIndiesLibrary
-   git remote add origin https://github.com/YOUR_USERNAME/smash-indies-library.git
+   git remote add origin https://github.com/YOUR_USERNAME/Indies-DB.git
    git branch -M main
    git push -u origin main
 
@@ -23,7 +23,7 @@ PART 2 — DEPLOY ON VERCEL (~5 min)
 ----------------------------------
 1. Go to https://vercel.com → Sign up / Log in (use GitHub login — easiest)
 2. Click Add New → Project
-3. Import your smash-indies-library repo
+3. Import your Indies-DB repo
 4. Framework Preset: Vite (auto-detected)
 5. Root Directory: . (leave default)
 6. Build Command: npm run build (default)
@@ -37,7 +37,7 @@ PART 2 — DEPLOY ON VERCEL (~5 min)
    Value: (same as your local .env)
 
 9. Click Deploy
-10. Wait ~1-2 min — you get a URL like https://smash-indies-library.vercel.app
+10. Wait ~1-2 min — you get a URL like https://indies-db.vercel.app
 
 
 PART 3 — FIX SUPABASE AUTH FOR LIVE SITE (REQUIRED)
@@ -46,10 +46,10 @@ Magic links break if you skip this.
 
 1. Supabase → Authentication → URL Configuration
 2. Site URL: set to your Vercel URL
-   e.g. https://smash-indies-library.vercel.app
+   e.g. https://indies-db.vercel.app
 3. Redirect URLs — add BOTH:
    http://localhost:5173
-   https://smash-indies-library.vercel.app
+   https://indies-db.vercel.app
    (use your real Vercel URL)
 
 4. Save
