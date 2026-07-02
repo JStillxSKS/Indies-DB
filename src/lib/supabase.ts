@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import type { MapRecord } from '../types/map'
+import type { DifficultyKey, ScoreRecord } from '../types/score'
 import { demoMapById, demoMapsSorted, demoSearch } from './demoMaps'
 
 const url = import.meta.env.VITE_SUPABASE_URL as string | undefined
@@ -109,4 +110,26 @@ export async function deleteMap(map: MapRecord): Promise<void> {
 
 export async function fetchAllMapsForStats(): Promise<MapRecord[]> {
   return fetchMaps('newest', 200)
+}
+
+export async function fetchMapScores(
+  mapId: string,
+  difficulty: DifficultyKey,
+  limit = 20,
+): Promise<ScoreRecord[]> {
+  if (!supabase) return []
+  const { data, error } = await supabase
+    .from('scores')
+    .select('*')
+    .eq('map_id', mapId)
+    .eq('difficulty', difficulty)
+    .order('score', { ascending: false })
+    .order('created_at', { ascending: true })
+    .limit(limit)
+
+  if (error) {
+    if (error.code === '42P01') return []
+    throw error
+  }
+  return (data ?? []) as ScoreRecord[]
 }
