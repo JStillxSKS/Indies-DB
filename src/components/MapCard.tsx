@@ -18,13 +18,18 @@ export function MapCard({ map }: { map: MapRecord }) {
           <span className="text-3xl text-muted/30">♪</span>
         )}
       </div>
-      <div className="p-3 flex flex-col gap-1 min-w-0">
-        <p className="font-semibold text-sm truncate">{map.title}</p>
-        <p className="text-xs text-muted truncate">{map.artist}</p>
-        <p className="text-xs text-muted truncate">by {map.charter}</p>
-        <div className="flex items-center justify-between mt-1">
+      <div className="p-3 flex flex-col gap-2 min-w-0">
+        <div className="min-w-0 space-y-0.5">
+          <p className="font-semibold text-sm truncate">{map.title}</p>
+          <p className="text-xs text-muted truncate">{map.artist}</p>
+          <p className="text-xs text-muted truncate">by {map.charter}</p>
+        </div>
+
+        <div className="pt-2 border-t border-border/60 space-y-2">
           <DifficultyBadges counts={map.difficulties} />
-          <span className="text-xs text-dl font-mono">{map.downloads} DL</span>
+          <p className="text-[11px] text-muted text-right tabular-nums">
+            {map.downloads.toLocaleString()} download{map.downloads === 1 ? '' : 's'}
+          </p>
         </div>
       </div>
     </Link>

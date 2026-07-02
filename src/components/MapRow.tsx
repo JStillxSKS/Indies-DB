@@ -27,7 +27,7 @@ export function MapRow({ map }: { map: MapRecord }) {
   return (
     <Link
       to={`/maps/${map.id}`}
-      className="grid grid-cols-[56px_1fr_auto] sm:grid-cols-[64px_1fr_auto_auto_auto] items-center gap-3 sm:gap-4 p-3 rounded-xl border border-border bg-surface hover:border-accent/40 transition-colors"
+      className="grid grid-cols-[56px_1fr_auto] sm:grid-cols-[64px_1fr_auto] items-center gap-3 sm:gap-5 p-3 sm:p-4 rounded-xl border border-border bg-surface hover:border-accent/40 transition-colors"
     >
       <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg bg-surface2 overflow-hidden flex items-center justify-center shrink-0">
         {cover ? (
@@ -37,27 +37,29 @@ export function MapRow({ map }: { map: MapRecord }) {
         )}
       </div>
 
-      <div className="min-w-0">
-        <p className="font-semibold truncate">{map.title}</p>
-        <p className="text-sm text-muted truncate">{map.artist}</p>
-        <p className="text-xs text-muted truncate">by {map.charter}</p>
+      <div className="min-w-0 space-y-2">
+        <div className="min-w-0">
+          <p className="font-semibold truncate">{map.title}</p>
+          <p className="text-sm text-muted truncate">{map.artist}</p>
+          <p className="text-xs text-muted truncate">by {map.charter}</p>
+        </div>
+
+        <DifficultyBadges counts={map.difficulties} size="md" />
+
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
+          {map.bpm_est ? <span>~{map.bpm_est} BPM</span> : null}
+          <span>{date}</span>
+        </div>
       </div>
 
-      <div className="hidden sm:block">
-        <DifficultyBadges counts={map.difficulties} />
-      </div>
-
-      <div className="hidden sm:block text-xs text-muted text-right">
-        <div>{map.bpm_est ? `~${map.bpm_est} BPM` : '—'}</div>
-        <div>{date}</div>
-      </div>
-
-      <div className="flex flex-col items-end gap-1 shrink-0">
-        <span className="text-xs text-dl font-mono">{map.downloads} DL</span>
+      <div className="flex flex-col items-end justify-center gap-2 shrink-0 pl-2 sm:pl-4 border-l border-border/50">
+        <span className="text-xs text-muted tabular-nums whitespace-nowrap">
+          {map.downloads.toLocaleString()} download{map.downloads === 1 ? '' : 's'}
+        </span>
         <button
           type="button"
           onClick={handleDownload}
-          className="px-3 py-1 rounded-lg btn-primary text-xs"
+          className="px-3 py-1.5 rounded-lg btn-primary text-xs whitespace-nowrap"
         >
           Download
         </button>

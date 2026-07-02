@@ -33,8 +33,7 @@ export default async function handler(req, res) {
       const map = Array.isArray(rows) ? rows[0] : null
       if (map) {
         title = `${map.title} — ${map.artist}`
-        const x = map.difficulties?.extreme ?? 0
-        description = `Chart by ${map.charter} · Extreme: ${x} notes · Download on Indies-DB`
+        description = `Chart by ${map.charter} · Indies-DB`
         pageUrl = `${siteOrigin}/maps/${id}`
         if (map.cover_path) {
           image = `${supabaseUrl}/storage/v1/object/public/indies/${map.cover_path}`

@@ -82,7 +82,7 @@ export function MapDetail() {
   const cover = coverPublicUrl(map.cover_path)
   const date = new Date(map.created_at).toLocaleDateString()
   const ogTitle = `${map.title} — ${map.artist}`
-  const ogDescription = `Chart by ${map.charter} · Download on Indies-DB`
+  const ogDescription = `Chart by ${map.charter} · Indies-DB`
   const ogImage = cover ?? `${window.location.origin}/og-default.svg`
   const pageUrl = window.location.href
 
@@ -118,13 +118,23 @@ export function MapDetail() {
         <div className="flex-1 min-w-0">
           <h1 className="text-2xl sm:text-3xl font-bold mb-1">{map.title}</h1>
           <p className="text-lg text-muted mb-4">{map.artist}</p>
-          <p className="text-sm text-muted mb-1">
-            Charter: <span className="text-text">{map.charter}</span>
-            {map.bpm_est ? ` · ~${map.bpm_est} BPM` : ''}
-          </p>
-          <p className="text-sm text-muted mb-6">
-            Uploaded {date} · {map.downloads} downloads
-          </p>
+          <div className="flex flex-wrap gap-2 mb-6">
+            <span className="text-sm text-muted px-3 py-1.5 rounded-lg bg-surface2 border border-border">
+              Charter <span className="text-text">{map.charter}</span>
+            </span>
+            {map.bpm_est ? (
+              <span className="text-sm text-muted px-3 py-1.5 rounded-lg bg-surface2 border border-border">
+                ~{map.bpm_est} BPM
+              </span>
+            ) : null}
+            <span className="text-sm text-muted px-3 py-1.5 rounded-lg bg-surface2 border border-border">
+              Uploaded <span className="text-text">{date}</span>
+            </span>
+            <span className="text-sm text-muted px-3 py-1.5 rounded-lg bg-surface2 border border-border tabular-nums">
+              <span className="text-text">{map.downloads.toLocaleString()}</span> download
+              {map.downloads === 1 ? '' : 's'}
+            </span>
+          </div>
 
           <div className="flex flex-wrap gap-2 mb-8">
             <button
