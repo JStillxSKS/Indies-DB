@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import type { MapRecord } from '../types/map'
@@ -80,9 +81,27 @@ export function MapDetail() {
 
   const cover = coverPublicUrl(map.cover_path)
   const date = new Date(map.created_at).toLocaleDateString()
+  const ogTitle = `${map.title} — ${map.artist}`
+  const ogDescription = `Chart by ${map.charter} · Download on Indies-DB`
+  const ogImage = cover ?? `${window.location.origin}/og-default.svg`
+  const pageUrl = window.location.href
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
+      <Helmet>
+        <title>{ogTitle} · Indies-DB</title>
+        <meta name="description" content={ogDescription} />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Indies-DB" />
+        <meta property="og:title" content={ogTitle} />
+        <meta property="og:description" content={ogDescription} />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:url" content={pageUrl} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={ogTitle} />
+        <meta name="twitter:description" content={ogDescription} />
+        <meta name="twitter:image" content={ogImage} />
+      </Helmet>
       <Link to="/maps" className="text-sm text-muted hover:text-text mb-6 inline-block">
         ← Back to maps
       </Link>
