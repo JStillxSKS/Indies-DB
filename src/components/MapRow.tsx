@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import type { MapRecord } from '../types/map'
-import { coverPublicUrl, filePublicUrl, incrementDownload } from '../lib/supabase'
+import { coverPublicUrl, downloadMapFile, incrementDownload } from '../lib/supabase'
 import { DifficultyBadges } from './DifficultyBadges'
 import { ExplicitBadge } from './ExplicitBadge'
 
@@ -14,13 +14,12 @@ export function MapRow({ map }: { map: MapRecord }) {
       alert('Demo mode — connect Supabase to enable real downloads.')
       return
     }
-    const url = filePublicUrl(map.file_path)
-    if (!url) return
-    await incrementDownload(map.id)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `${map.title}.indies`
-    a.click()
+    try {
+      await incrementDownload(map.id)
+      await downloadMapFile(map)
+    } catch (e) {
+      alert(e instanceof Error ? e.message : 'Download failed')
+    }
   }
 
   const date = new Date(map.created_at).toLocaleDateString()

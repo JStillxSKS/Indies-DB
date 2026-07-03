@@ -6,8 +6,8 @@ import type { MapRecord } from '../types/map'
 import {
   coverPublicUrl,
   deleteMap,
+  downloadMapFile,
   fetchMap,
-  filePublicUrl,
   incrementDownload,
   supabaseConfigured,
 } from '../lib/supabase'
@@ -43,14 +43,13 @@ export function MapDetail() {
       alert('Demo mode — connect Supabase to enable real downloads.')
       return
     }
-    const url = filePublicUrl(map.file_path)
-    if (!url) return
-    await incrementDownload(map.id)
-    setMap({ ...map, downloads: map.downloads + 1 })
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `${map.title}.indies`
-    a.click()
+    try {
+      await incrementDownload(map.id)
+      setMap({ ...map, downloads: map.downloads + 1 })
+      await downloadMapFile(map)
+    } catch (e) {
+      alert(e instanceof Error ? e.message : 'Download failed')
+    }
   }
 
   function handleShare() {

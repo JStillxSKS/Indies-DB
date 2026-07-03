@@ -30,6 +30,33 @@ export function filePublicUrl(filePath: string): string | null {
   return data.publicUrl
 }
 
+/** Safe filename for a downloaded .indies package. */
+export function mapDownloadFilename(title: string): string {
+  const safe = title
+    .trim()
+    .replace(/[<>:"/\\|?*\u0000-\u001f]/g, '_')
+    .replace(/\s+/g, ' ')
+    .slice(0, 120)
+  return `${safe || 'Untitled Song'}.indies`
+}
+
+/** Download via blob so the browser uses the song title, not the storage UUID. */
+export async function downloadMapFile(map: Pick<MapRecord, 'title' | 'file_path'>): Promise<void> {
+  const url = filePublicUrl(map.file_path)
+  if (!url) throw new Error('File not available')
+
+  const res = await fetch(url)
+  if (!res.ok) throw new Error('Download failed')
+
+  const blob = await res.blob()
+  const objectUrl = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = objectUrl
+  a.download = mapDownloadFilename(map.title)
+  a.click()
+  URL.revokeObjectURL(objectUrl)
+}
+
 export async function fetchMaps(sort: 'newest' | 'downloads', limit = 24): Promise<MapRecord[]> {
   if (!supabase) return demoMapsSorted(sort).slice(0, limit)
   const order = sort === 'downloads' ? 'downloads' : 'created_at'
