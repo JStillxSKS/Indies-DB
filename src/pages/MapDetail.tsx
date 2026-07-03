@@ -22,7 +22,6 @@ export function MapDetail() {
   const [loading, setLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
   const [copied, setCopied] = useState(false)
-  const [discordCopied, setDiscordCopied] = useState(false)
   const [deleting, setDeleting] = useState(false)
 
   const isOwner = user && map && user.id === map.mapper_id
@@ -57,19 +56,6 @@ export function MapDetail() {
     navigator.clipboard.writeText(window.location.href)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
-  }
-
-  function handleDiscordShare() {
-    const text = [
-      `🥁 **${map!.title}** — ${map!.artist}`,
-      `Chart by ${map!.charter} · Smash Drums Indies`,
-      pageUrl,
-      '',
-      '_After your run, tap **Discord → Submit Score** in-game to post your score._',
-    ].join('\n')
-    navigator.clipboard.writeText(text)
-    setDiscordCopied(true)
-    setTimeout(() => setDiscordCopied(false), 2500)
   }
 
   async function handleDelete() {
@@ -165,13 +151,6 @@ export function MapDetail() {
               className="px-4 py-3 rounded-lg border border-border bg-surface hover:border-accent/40 text-sm"
             >
               {copied ? 'Link copied!' : 'Share link'}
-            </button>
-            <button
-              type="button"
-              onClick={handleDiscordShare}
-              className="px-4 py-3 rounded-lg border border-[#5865F2]/40 bg-[#5865F2]/10 hover:bg-[#5865F2]/20 text-sm text-[#b8c1ff]"
-            >
-              {discordCopied ? 'Discord text copied!' : 'Share on Discord'}
             </button>
             {isOwner && supabaseConfigured && (
               <button
