@@ -1,2 +1,2 @@
-/** Turn on after in-game score submit to Indies-DB is officially supported. */
-export const leaderboardsEnabled = false
+/** Leaderboards on map pages (no in-game submit instructions until officially supported). */
+export const leaderboardsEnabled = true
