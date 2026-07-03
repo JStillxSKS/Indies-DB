@@ -13,6 +13,7 @@ import {
 } from '../lib/supabase'
 import { DifficultyBar } from '../components/DifficultyBar'
 import { Leaderboard } from '../components/Leaderboard'
+import { ExplicitBadge } from '../components/ExplicitBadge'
 
 export function MapDetail() {
   const { id } = useParams<{ id: string }>()
@@ -117,7 +118,10 @@ export function MapDetail() {
         </div>
 
         <div className="flex-1 min-w-0">
-          <h1 className="text-2xl sm:text-3xl font-bold mb-1">{map.title}</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-1 flex flex-wrap items-center gap-2">
+            {map.title}
+            {map.explicit ? <ExplicitBadge size="md" full /> : null}
+          </h1>
           <p className="text-lg text-muted mb-4">{map.artist}</p>
           <div className="flex flex-wrap gap-2 mb-6">
             <span className="text-sm text-muted px-3 py-1.5 rounded-lg bg-surface2 border border-border">
@@ -135,6 +139,11 @@ export function MapDetail() {
               <span className="text-text">{map.downloads.toLocaleString()}</span> download
               {map.downloads === 1 ? '' : 's'}
             </span>
+            {map.explicit ? (
+              <span className="text-sm text-amber-300 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30">
+                Contains explicit language
+              </span>
+            ) : null}
           </div>
 
           <div className="flex flex-wrap gap-2 mb-8">

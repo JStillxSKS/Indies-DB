@@ -15,6 +15,7 @@ export type MapRecord = {
   cover_path: string | null
   bpm_est: number | null
   difficulties: DifficultyCounts
+  explicit: boolean
   downloads: number
   created_at: string
 }

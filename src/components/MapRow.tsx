@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import type { MapRecord } from '../types/map'
 import { coverPublicUrl, filePublicUrl, incrementDownload } from '../lib/supabase'
 import { DifficultyBadges } from './DifficultyBadges'
+import { ExplicitBadge } from './ExplicitBadge'
 
 export function MapRow({ map }: { map: MapRecord }) {
   const cover = coverPublicUrl(map.cover_path)
@@ -39,7 +40,10 @@ export function MapRow({ map }: { map: MapRecord }) {
 
       <div className="min-w-0 space-y-2">
         <div className="min-w-0">
-          <p className="font-semibold truncate">{map.title}</p>
+          <p className="font-semibold truncate flex items-center gap-1.5 min-w-0">
+            <span className="truncate">{map.title}</span>
+            {map.explicit ? <ExplicitBadge size="md" /> : null}
+          </p>
           <p className="text-sm text-muted truncate">{map.artist}</p>
           <p className="text-xs text-muted truncate">by {map.charter}</p>
         </div>

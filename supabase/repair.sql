@@ -32,9 +32,16 @@ create table if not exists public.maps (
   cover_path text,
   bpm_est numeric,
   difficulties jsonb not null default '{"easy":0,"normal":0,"hard":0,"extreme":0}'::jsonb,
+  explicit boolean not null default false,
   downloads integer not null default 0,
   created_at timestamptz not null default now()
 );
+
+alter table public.maps
+  add column if not exists explicit boolean not null default false;
+
+drop index if exists maps_tags_idx;
+alter table public.maps drop column if exists tags;
 
 create index if not exists maps_created_at_idx on public.maps (created_at desc);
 create index if not exists maps_downloads_idx on public.maps (downloads desc);

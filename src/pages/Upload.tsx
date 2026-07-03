@@ -13,6 +13,7 @@ export function Upload() {
   const [error, setError] = useState<string | null>(null)
   const [publishing, setPublishing] = useState(false)
   const [dragOver, setDragOver] = useState(false)
+  const [explicit, setExplicit] = useState(false)
 
   if (!supabaseConfigured) {
     return (
@@ -42,6 +43,7 @@ export function Upload() {
   async function handleFile(file: File) {
     setError(null)
     setParsed(null)
+    setExplicit(false)
     try {
       const result = await parseIndiesFile(file)
       setParsed(result)
@@ -86,6 +88,7 @@ export function Upload() {
           cover_path: coverPath,
           bpm_est: parsed.bpmEst,
           difficulties: parsed.difficulties,
+          explicit,
         })
         .select('id')
         .single()
@@ -170,6 +173,21 @@ export function Upload() {
               className="w-24 h-24 rounded-lg mt-4 object-cover"
             />
           )}
+
+          <label className="flex items-start gap-3 mt-6 p-4 rounded-lg border border-border bg-surface2/50 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={explicit}
+              onChange={(e) => setExplicit(e.target.checked)}
+              className="mt-0.5 accent-amber-400"
+            />
+            <span>
+              <span className="font-medium text-sm block">Explicit language</span>
+              <span className="text-xs text-muted mt-1 block">
+                Check this if the song contains swearing or other explicit lyrics so people know before they download.
+              </span>
+            </span>
+          </label>
 
           <button
             type="button"
