@@ -13,6 +13,7 @@ import {
 } from '../lib/supabase'
 import { DifficultyBar } from '../components/DifficultyBar'
 import { Leaderboard } from '../components/Leaderboard'
+import { leaderboardsEnabled } from '../lib/features'
 
 export function MapDetail() {
   const { id } = useParams<{ id: string }>()
@@ -169,9 +170,11 @@ export function MapDetail() {
           </h2>
           <DifficultyBar counts={map.difficulties} />
 
-          <div className="mt-10">
-            <Leaderboard mapId={map.id} />
-          </div>
+          {leaderboardsEnabled && (
+            <div className="mt-10">
+              <Leaderboard mapId={map.id} />
+            </div>
+          )}
 
           <Link to="/install" className="inline-block mt-8 text-sm text-accent hover:text-accent-hover">
             How to install →
