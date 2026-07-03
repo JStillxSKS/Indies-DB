@@ -49,7 +49,7 @@ export function Leaderboard({ mapId }: { mapId: string }) {
         <p className="text-sm text-muted">Loading scores…</p>
       ) : scores.length === 0 ? (
         <p className="text-sm text-muted py-4 text-center border border-border rounded-lg bg-surface2/50">
-          No scores yet — finish a run and tap <span className="text-text">Discord → Submit Score</span> in-game.
+          No scores yet
         </p>
       ) : (
         <ol className="border border-border rounded-lg overflow-hidden divide-y divide-border">
