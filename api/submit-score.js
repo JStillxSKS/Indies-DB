@@ -101,10 +101,18 @@ export default async function handler(req, res) {
       return res.status(submit.status).json({ error: errText || 'Submit failed' })
     }
 
-    const scoreId = await submit.json()
+    const result = await submit.json()
+    const scoreId = typeof result === 'string' ? result : result?.id
+    const improved = typeof result === 'object' && result !== null ? result.improved !== false : true
     return res.status(200).json({
       ok: true,
       scoreId,
+      improved,
+      score: typeof result === 'object' && result !== null ? result.score : Math.round(score),
+      previousScore:
+        typeof result === 'object' && result !== null ? result.previous_score ?? null : null,
+      submittedScore:
+        typeof result === 'object' && result !== null ? result.submitted_score ?? null : null,
       mapId,
       url: `https://indies-db.vercel.app/maps/${mapId}`,
     })
