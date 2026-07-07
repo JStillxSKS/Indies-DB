@@ -3,6 +3,7 @@ import type { DifficultyKey, ScoreRecord } from '../types/score'
 import { fetchMapScores } from '../lib/supabase'
 
 const DIFFICULTIES: { key: DifficultyKey; label: string }[] = [
+  { key: 'hardcore', label: 'Hardcore' },
   { key: 'extreme', label: 'Extreme' },
   { key: 'hard', label: 'Hard' },
   { key: 'normal', label: 'Normal' },
@@ -10,7 +11,7 @@ const DIFFICULTIES: { key: DifficultyKey; label: string }[] = [
 ]
 
 export function Leaderboard({ mapId }: { mapId: string }) {
-  const [difficulty, setDifficulty] = useState<DifficultyKey>('extreme')
+  const [difficulty, setDifficulty] = useState<DifficultyKey>('hardcore')
   const [scores, setScores] = useState<ScoreRecord[]>([])
   const [loading, setLoading] = useState(true)
 

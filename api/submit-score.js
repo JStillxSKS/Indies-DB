@@ -3,7 +3,7 @@
 const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
-const DIFFICULTIES = new Set(['easy', 'normal', 'hard', 'extreme'])
+const DIFFICULTIES = new Set(['easy', 'normal', 'hard', 'extreme', 'hardcore'])
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*')

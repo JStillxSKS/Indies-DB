@@ -4,7 +4,7 @@ create table if not exists public.scores (
   id uuid primary key default gen_random_uuid(),
   map_id uuid not null references public.maps (id) on delete cascade,
   player_name text not null,
-  difficulty text not null check (difficulty in ('easy', 'normal', 'hard', 'extreme')),
+  difficulty text not null check (difficulty in ('easy', 'normal', 'hard', 'extreme', 'hardcore')),
   score integer not null check (score >= 0 and score <= 99999999),
   accuracy numeric check (accuracy is null or (accuracy >= 0 and accuracy <= 1)),
   max_combo integer check (max_combo is null or max_combo >= 0),
@@ -52,7 +52,7 @@ begin
     raise exception 'Player name required';
   end if;
 
-  if p_difficulty not in ('easy', 'normal', 'hard', 'extreme') then
+  if p_difficulty not in ('easy', 'normal', 'hard', 'extreme', 'hardcore') then
     raise exception 'Invalid difficulty';
   end if;
 

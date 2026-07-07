@@ -1,4 +1,4 @@
-export type DifficultyKey = 'easy' | 'normal' | 'hard' | 'extreme'
+export type DifficultyKey = 'easy' | 'normal' | 'hard' | 'extreme' | 'hardcore'
 
 export type ScoreRecord = {
   id: string
