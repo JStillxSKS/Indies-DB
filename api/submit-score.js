@@ -4,6 +4,7 @@ const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
 const DIFFICULTIES = new Set(['easy', 'normal', 'hard', 'extreme', 'hardcore'])
+const GAME_MODES = new Set(['classic', 'arcade'])
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*')
@@ -28,6 +29,8 @@ export default async function handler(req, res) {
 
   let mapId = typeof body.mapId === 'string' && UUID_RE.test(body.mapId) ? body.mapId : null
   const difficulty = typeof body.difficulty === 'string' ? body.difficulty.toLowerCase() : ''
+  const gameMode =
+    typeof body.gameMode === 'string' ? body.gameMode.toLowerCase().trim() : 'classic'
   const playerName = typeof body.playerName === 'string' ? body.playerName.trim() : ''
   const score = Number(body.score)
   const accuracy = body.accuracy != null ? Number(body.accuracy) : null
@@ -36,6 +39,12 @@ export default async function handler(req, res) {
 
   if (!DIFFICULTIES.has(difficulty)) {
     return res.status(400).json({ error: 'Invalid difficulty' })
+  }
+  if (!GAME_MODES.has(gameMode)) {
+    return res.status(400).json({ error: 'Invalid game mode' })
+  }
+  if (difficulty === 'hardcore' && gameMode !== 'classic') {
+    return res.status(400).json({ error: 'Hardcore is Classic only' })
   }
   if (!playerName || playerName.length > 32) {
     return res.status(400).json({ error: 'Player name required (max 32 chars)' })
@@ -93,6 +102,7 @@ export default async function handler(req, res) {
         p_accuracy: Number.isFinite(accuracy) ? accuracy : null,
         p_max_combo: Number.isFinite(maxCombo) ? Math.round(maxCombo) : null,
         p_mod_version: modVersion,
+        p_game_mode: gameMode,
       }),
     })
 
@@ -113,6 +123,8 @@ export default async function handler(req, res) {
         typeof result === 'object' && result !== null ? result.previous_score ?? null : null,
       submittedScore:
         typeof result === 'object' && result !== null ? result.submitted_score ?? null : null,
+      gameMode:
+        typeof result === 'object' && result !== null ? result.game_mode ?? gameMode : gameMode,
       mapId,
       url: `https://indies-db.vercel.app/maps/${mapId}`,
     })

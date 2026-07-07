@@ -1,34 +1,24 @@
--- Indies-DB score leaderboards (run in Supabase SQL Editor)
+-- Add Classic / Arcade game modes to leaderboards (run once in Supabase SQL Editor)
 
-create table if not exists public.scores (
-  id uuid primary key default gen_random_uuid(),
-  map_id uuid not null references public.maps (id) on delete cascade,
-  player_name text not null,
-  difficulty text not null check (difficulty in ('easy', 'normal', 'hard', 'extreme', 'hardcore')),
-  game_mode text not null default 'classic' check (game_mode in ('classic', 'arcade')),
-  score integer not null check (score >= 0 and score <= 99999999),
-  accuracy numeric check (accuracy is null or (accuracy >= 0 and accuracy <= 1)),
-  max_combo integer check (max_combo is null or max_combo >= 0),
-  mod_version text,
-  created_at timestamptz not null default now()
-);
+alter table public.scores
+  add column if not exists game_mode text not null default 'classic';
 
-create index if not exists scores_leaderboard_mode_idx
-  on public.scores (map_id, game_mode, difficulty, score desc, created_at desc);
+alter table public.scores drop constraint if exists scores_game_mode_check;
+alter table public.scores add constraint scores_game_mode_check
+  check (game_mode in ('classic', 'arcade'));
+
+drop index if exists scores_player_map_diff_idx;
+drop index if exists scores_player_map_diff_mode_idx;
 
 create unique index if not exists scores_player_map_diff_mode_idx
   on public.scores (map_id, lower(trim(player_name)), difficulty, game_mode);
 
-create index if not exists scores_map_idx on public.scores (map_id);
+create index if not exists scores_leaderboard_mode_idx
+  on public.scores (map_id, game_mode, difficulty, score desc, created_at desc);
 
-alter table public.scores enable row level security;
+drop function if exists public.submit_score(uuid, text, text, integer, numeric, integer, text);
+drop function if exists public.submit_score(uuid, text, text, integer, numeric, integer, text, text);
 
-drop policy if exists "scores_public_read" on public.scores;
-drop policy if exists "scores_insert_via_rpc" on public.scores;
-
-create policy "scores_public_read" on public.scores for select using (true);
-
--- Inserts go through security-definer RPC (mod API), not direct client insert
 create or replace function public.submit_score(
   p_map_id uuid,
   p_player_name text,
@@ -134,24 +124,3 @@ $$;
 grant execute on function public.submit_score(
   uuid, text, text, integer, numeric, integer, text, text
 ) to anon, authenticated;
-
-create or replace function public.lookup_map_id(
-  p_title text,
-  p_artist text default '',
-  p_charter text default ''
-)
-returns uuid
-language sql
-stable
-security definer
-set search_path = public
-as $$
-  select id from public.maps
-  where lower(trim(title)) = lower(trim(p_title))
-    and lower(trim(artist)) = lower(trim(coalesce(p_artist, '')))
-    and (p_charter = '' or lower(trim(charter)) = lower(trim(p_charter)))
-  order by created_at desc
-  limit 1;
-$$;
-
-grant execute on function public.lookup_map_id(text, text, text) to anon, authenticated;

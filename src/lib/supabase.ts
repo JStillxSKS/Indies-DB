@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import type { MapRecord } from '../types/map'
-import type { DifficultyKey, ScoreRecord } from '../types/score'
+import type { DifficultyKey, GameModeKey, ScoreRecord } from '../types/score'
 import { demoMapById, demoMapsSorted, demoSearch } from './demoMaps'
 
 const url = import.meta.env.VITE_SUPABASE_URL as string | undefined
@@ -142,6 +142,7 @@ export async function fetchAllMapsForStats(): Promise<MapRecord[]> {
 export async function fetchMapScores(
   mapId: string,
   difficulty: DifficultyKey,
+  gameMode: GameModeKey = 'classic',
   limit = 20,
 ): Promise<ScoreRecord[]> {
   if (!supabase) return []
@@ -150,6 +151,7 @@ export async function fetchMapScores(
     .select('*')
     .eq('map_id', mapId)
     .eq('difficulty', difficulty)
+    .eq('game_mode', gameMode)
     .order('score', { ascending: false })
     .order('created_at', { ascending: true })
     .limit(limit)

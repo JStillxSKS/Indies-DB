@@ -1,29 +1,40 @@
 import { useEffect, useState } from 'react'
-import type { DifficultyKey, ScoreRecord } from '../types/score'
+import type { DifficultyKey, GameModeKey, ScoreRecord } from '../types/score'
 import { fetchMapScores } from '../lib/supabase'
-
-const DIFFICULTIES: { key: DifficultyKey; label: string }[] = [
-  { key: 'hardcore', label: 'Hardcore' },
-  { key: 'extreme', label: 'Extreme' },
-  { key: 'hard', label: 'Hard' },
-  { key: 'normal', label: 'Normal' },
-  { key: 'easy', label: 'Easy' },
-]
+import {
+  defaultDifficultyForMode,
+  DIFFICULTIES_BY_MODE,
+  GAME_MODES,
+} from '../lib/leaderboardConfig'
 
 export function Leaderboard({ mapId }: { mapId: string }) {
+  const [gameMode, setGameMode] = useState<GameModeKey>('classic')
   const [difficulty, setDifficulty] = useState<DifficultyKey>('hardcore')
   const [scores, setScores] = useState<ScoreRecord[]>([])
   const [loading, setLoading] = useState(true)
 
+  const difficulties = DIFFICULTIES_BY_MODE[gameMode]
+
+  useEffect(() => {
+    if (!difficulties.some((d) => d.key === difficulty)) {
+      setDifficulty(defaultDifficultyForMode(gameMode))
+    }
+  }, [gameMode, difficulty, difficulties])
+
   useEffect(() => {
     setLoading(true)
-    fetchMapScores(mapId, difficulty)
+    fetchMapScores(mapId, difficulty, gameMode)
       .then(setScores)
       .finally(() => setLoading(false))
-  }, [mapId, difficulty])
+  }, [mapId, difficulty, gameMode])
 
   const rowGrid =
     'grid grid-cols-[2rem_1fr_auto] sm:grid-cols-[2.5rem_1fr_auto_auto] gap-2 sm:gap-4 items-center px-3 py-2.5 text-sm'
+
+  const tabClass = (active: boolean) =>
+    active
+      ? 'px-2.5 py-1 rounded-md text-xs btn-primary shadow-none'
+      : 'px-2.5 py-1 rounded-md text-xs border border-border bg-surface2 text-muted hover:text-text'
 
   return (
     <section className="rounded-xl border border-border bg-surface2/30 p-4 sm:p-5">
@@ -32,23 +43,35 @@ export function Leaderboard({ mapId }: { mapId: string }) {
           <h2 className="text-sm font-semibold text-text uppercase tracking-wide">
             Leaderboard
           </h2>
-          <p className="text-xs text-muted mt-1">Community high scores for this map</p>
+          <p className="text-xs text-muted mt-1">
+            {gameMode === 'classic' ? 'Classic' : 'Arcade'} · community high scores
+          </p>
         </div>
-        <div className="flex gap-1">
-          {DIFFICULTIES.map((d) => (
-            <button
-              key={d.key}
-              type="button"
-              onClick={() => setDifficulty(d.key)}
-              className={
-                difficulty === d.key
-                  ? 'px-2.5 py-1 rounded-md text-xs btn-primary shadow-none'
-                  : 'px-2.5 py-1 rounded-md text-xs border border-border bg-surface2 text-muted hover:text-text'
-              }
-            >
-              {d.label}
-            </button>
-          ))}
+        <div className="flex flex-col items-end gap-2">
+          <div className="flex gap-1">
+            {GAME_MODES.map((m) => (
+              <button
+                key={m.key}
+                type="button"
+                onClick={() => setGameMode(m.key)}
+                className={tabClass(gameMode === m.key)}
+              >
+                {m.label}
+              </button>
+            ))}
+          </div>
+          <div className="flex flex-wrap justify-end gap-1">
+            {difficulties.map((d) => (
+              <button
+                key={d.key}
+                type="button"
+                onClick={() => setDifficulty(d.key)}
+                className={tabClass(difficulty === d.key)}
+              >
+                {d.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
