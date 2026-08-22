@@ -29,12 +29,16 @@ PART 2 — DEPLOY ON VERCEL (~5 min)
 6. Build Command: npm run build (default)
 7. Output Directory: dist (default)
 
-8. Expand Environment Variables — add BOTH:
+8. Expand Environment Variables — add ALL THREE:
    Name: VITE_SUPABASE_URL
    Value: (same as your local .env)
 
    Name: VITE_SUPABASE_ANON_KEY
    Value: (same as your local .env)
+
+   Name: BOT_REGISTER_SECRET
+   Value: (same long random string as on Render / bot .env — enables Discord
+   reply-to-register for unknown in-game song hashes)
 
 9. Click Deploy
 10. Wait ~1-2 min — you get a URL like https://indies-db.vercel.app
@@ -76,6 +80,14 @@ Optional — Google login (one-click, no email limits):
   3. Authorized redirect URI:
      https://hitztaczxvpgdvseudjy.supabase.co/auth/v1/callback
   4. Paste Client ID + Secret into Supabase Google provider
+
+
+ADD BOT_REGISTER_SECRET LATER (if Discord bot says it's missing)
+---------------------------------------------------------------
+1. Vercel → Indies-DB project → Settings → Environment Variables
+2. Add BOT_REGISTER_SECRET (must match Render + bot .env exactly)
+3. Apply to Production (and Preview if you use it)
+4. Deployments → latest → ⋯ → Redeploy (required — env changes don't apply until redeploy)
 
 
 SHARE WITH MAPPERS

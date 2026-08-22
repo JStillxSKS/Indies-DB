@@ -1,4 +1,5 @@
 -- Add Classic / Arcade game modes to leaderboards (run once in Supabase SQL Editor)
+-- Preferred paste target (full + diagnostics): SQL_EDITOR_arcade_leaderboards.sql
 
 alter table public.scores
   add column if not exists game_mode text not null default 'classic';

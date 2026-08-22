@@ -1,3 +1,12 @@
+-- ⚠️ OBSOLETE — do NOT run this in Supabase after Arcade support.
+-- This version of submit_score has NO p_game_mode and unique index without game_mode.
+-- It will collapse Classic/Arcade boards together again.
+--
+-- Use instead (SQL Editor):
+--   supabase/SQL_EDITOR_arcade_leaderboards.sql
+--   (or supabase/game-mode.sql)
+--
+-- Historical: one score per player per map per difficulty (pre-arcade).
 -- One score per player per map per difficulty; only keep/update if new score is higher.
 -- Run once in Supabase SQL Editor (after hardcore.sql if you ran that).
 
