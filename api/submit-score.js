@@ -28,6 +28,7 @@ export default async function handler(req, res) {
   const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body ?? {}
 
   let mapId = typeof body.mapId === 'string' && UUID_RE.test(body.mapId) ? body.mapId : null
+  const hash = typeof body.hash === 'string' ? body.hash.trim() : ''
   const difficulty = typeof body.difficulty === 'string' ? body.difficulty.toLowerCase() : ''
   const gameMode =
     typeof body.gameMode === 'string' ? body.gameMode.toLowerCase().trim() : 'classic'
@@ -54,6 +55,24 @@ export default async function handler(req, res) {
   }
 
   try {
+    if (!mapId && /^[A-Za-z0-9_-]{4,32}$/.test(hash)) {
+      const byHash = await fetch(
+        `${supabaseUrl}/rest/v1/maps?in_game_hash=eq.${encodeURIComponent(hash)}&select=id&limit=1`,
+        {
+          headers: {
+            apikey: supabaseKey,
+            Authorization: `Bearer ${supabaseKey}`,
+            Accept: 'application/json',
+          },
+        },
+      )
+      if (!byHash.ok) {
+        return res.status(502).json({ error: 'Map lookup failed' })
+      }
+      const maps = await byHash.json()
+      mapId = Array.isArray(maps) && maps[0]?.id ? maps[0].id : null
+    }
+
     if (!mapId) {
       const title = typeof body.title === 'string' ? body.title.trim() : ''
       const artist = typeof body.artist === 'string' ? body.artist.trim() : ''
